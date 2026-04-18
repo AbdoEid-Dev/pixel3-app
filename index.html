@@ -2,398 +2,1083 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pixel3 Ultimate OS - The Grand Vault</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Tajawal:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Pixel3 - التطبيق المتكامل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --primary: #00ffcc; 
-            --verify: #1d9bf0;
-            --bg: #000;
-            --surface: #0a0a0a;
-            --border: #1a1a1a;
-            --text-fb: #e4e6eb;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; border: none; }
         body {
-            margin: 0; background-color: var(--bg); color: var(--text-fb);
-            font-family: 'Tajawal', sans-serif; overflow: hidden; height: 100vh;
+            font-family: 'Tajawal', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.theme-light {
+            background: #f0f2f5;
+            color: #1a1a1a;
+        }
+        body.theme-dark {
+            background: #0a0a0f;
+            color: #e4e6eb;
+        }
+        body.theme-dark .app-header,
+        body.theme-dark .back-bar,
+        body.theme-dark .fb-post,
+        body.theme-dark .lib-card,
+        body.theme-dark .file-row,
+        body.theme-dark .settings-card,
+        body.theme-dark .profile-overlay,
+        body.theme-dark .popup-card,
+        body.theme-dark .reaction-picker {
+            background: #14141f;
+            color: #e4e6eb;
+        }
+        body.theme-dark .post-stats,
+        body.theme-dark .post-time,
+        body.theme-dark .stat-label {
+            color: #a0a0b0;
+        }
+        body.theme-dark .bottom-nav {
+            background: rgba(20, 20, 31, 0.96);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        body.theme-dark .nav-item {
+            color: #a0a0b0;
+        }
+        body.theme-dark .nav-item.active {
+            background: #1877f2;
+            color: white;
+        }
+        body.theme-dark .popup-card input {
+            background: #0a0a0f;
+            border-color: #2a2a35;
+            color: white;
+        }
+        body.theme-dark .back-btn {
+            background: #0a0a0f;
+            color: white;
+        }
+        body.theme-dark .theme-option,
+        body.theme-dark .lang-option {
+            background: #0a0a0f;
+            color: #e4e6eb;
+        }
+        body.theme-dark .action-btn {
+            color: #a0a0b0;
+        }
+        body.theme-dark .action-btn:active {
+            background: #0a0a0f;
+        }
+        body.theme-dark .order-code {
+            background: #0a0a0f !important;
+            color: #e4e6eb !important;
         }
 
-        /* --- شاشة التحميل الاحترافية الجديدة --- */
         #splash {
-            position: fixed; inset: 0; background: #000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10000; transition: opacity 0.8s ease;
+            position: fixed;
+            inset: 0;
+            background: #1877f2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
         }
-        .splash-content { text-align: center; width: 100%; }
-        .splash-logo { 
-            font-family: 'Orbitron'; font-size: 42px; font-weight: 900; 
-            color: var(--primary); letter-spacing: 8px; margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(0,255,204,0.5);
-            animation: pulse 1.5s infinite;
+        .splash-logo {
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 30px;
         }
-        .loader-container { width: 220px; height: 4px; background: #111; border-radius: 10px; margin: 0 auto; overflow: hidden; position: relative; }
-        .loader-bar { position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: var(--primary); box-shadow: 0 0 15px var(--primary); transition: width 0.3s; }
-        .loader-text { margin-top: 15px; font-family: 'Fira Code'; font-size: 10px; color: var(--primary); opacity: 0.6; letter-spacing: 2px; }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.98); }
+        .loader-container {
+            width: 200px;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
         }
-        /* ---------------------------------- */
-
-        header {
-            height: 65px; background: #000; border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 15px;
-            position: sticky; top: 0; z-index: 2000;
+        .loader-bar {
+            width: 0%;
+            height: 100%;
+            background: white;
+            transition: width 0.2s;
         }
-        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--primary); font-size: 24px; text-shadow: 0 0 10px rgba(0,255,204,0.3); }
 
-        #main-viewport { height: calc(100vh - 135px); overflow-y: auto; scrollbar-width: none; background: #000; padding-bottom: 20px; }
-        #main-viewport::-webkit-scrollbar { display: none; }
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
 
-        .fb-post { background: var(--surface); margin-bottom: 12px; border-bottom: 1px solid var(--border); }
-        .p-header { display: flex; align-items: center; padding: 12px; gap: 12px; }
-        .p-pfp { width: 45px; height: 45px; border-radius: 50%; border: 1.5px solid var(--primary); padding: 2px; }
-        .p-user-info { flex: 1; }
-        .p-username { font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 5px; color: #fff; }
-        .v-badge { width: 17px; height: 17px; }
-        .p-date { font-size: 11px; color: #777; margin-top: 2px; }
-        .p-body { padding: 0 15px 15px 15px; font-size: 15px; line-height: 1.6; }
-        .p-image { width: 100%; max-height: 400px; object-fit: cover; background: #050505; display: block; }
-        .p-metrics { padding: 10px 15px; display: flex; justify-content: space-between; border-bottom: 1px solid #151515; font-size: 12px; color: #aaa; }
-        .p-reacts { display: flex; align-items: center; }
-        .p-reacts span { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #000; margin-left: -5px; }
-        .p-actions { display: flex; padding: 5px; }
-        .action-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 600; color: #b0b3b8; cursor: pointer; }
-        .action-btn:active { background: #1a1a1a; color: var(--primary); }
+        .app-header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e4e6eb;
+        }
+        body.theme-dark .app-header {
+            border-bottom-color: #2a2a35;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1877f2, #0e5fd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-icons {
+            display: flex;
+            gap: 18px;
+        }
+        .header-icons i {
+            font-size: 20px;
+            color: #65676b;
+            cursor: pointer;
+        }
 
-        .lib-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 90px;
+        }
+
+        /* البوستات */
+        .fb-post {
+            background: white;
+            margin: 12px 16px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .post-header {
+            display: flex;
+            padding: 14px;
+            gap: 12px;
+            align-items: center;
+        }
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1877f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+        .post-user-info {
+            flex: 1;
+            cursor: pointer;
+        }
+        .post-username {
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .verified-badge {
+            color: #1877f2;
+            font-size: 13px;
+        }
+        .owner-badge {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .post-time {
+            font-size: 11px;
+            color: #65676b;
+        }
+        .post-text {
+            padding: 0 14px 12px 14px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .post-image {
+            width: 100%;
+            max-height: 350px;
+            object-fit: cover;
+        }
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-top: 1px solid #e4e6eb;
+            font-size: 12px;
+            color: #65676b;
+        }
+        body.theme-dark .post-stats {
+            border-top-color: #2a2a35;
+        }
+        .post-actions {
+            display: flex;
+            padding: 6px 12px 12px 12px;
+            gap: 8px;
+        }
+        .action-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #65676b;
+            transition: 0.1s;
+        }
+        .action-btn:active {
+            background: #f0f2f5;
+            transform: scale(0.98);
+        }
+        body.theme-dark .action-btn:active {
+            background: #0a0a0f;
+        }
+        .action-btn.has-reaction {
+            color: #e0245e;
+        }
+        .action-btn.has-reaction i {
+            color: #e0245e;
+        }
+
+        /* منتقي التفاعلات */
+        .reaction-picker {
+            position: fixed;
+            background: white;
+            border-radius: 60px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 2000;
+            animation: fadeInUp 0.2s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reaction-emoji {
+            font-size: 32px;
+            cursor: pointer;
+            transition: 0.1s;
+            padding: 5px;
+        }
+        .reaction-emoji:active {
+            transform: scale(1.3);
+        }
+
+        .float-emoji {
+            position: fixed;
+            font-size: 40px;
+            pointer-events: none;
+            z-index: 2000;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: scale(0.5) translateY(0); opacity: 1; }
+            100% { transform: scale(1.5) translateY(-80px); opacity: 0; }
+        }
+
+        /* الشريط السفلي - متجاوب بالكامل */
+        .bottom-nav {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 10px 12px;
+            display: flex;
+            gap: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 100;
+            width: calc(100% - 32px);
+            max-width: 480px;
+            justify-content: space-around;
+        }
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 40px;
+            transition: 0.2s;
+            color: #65676b;
+            flex: 1;
+            min-width: 0;
+        }
+        .nav-item i {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .nav-item span {
+            font-size: 10px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .nav-item.active {
+            background: #1877f2;
+            color: white;
+        }
+
+        .back-bar {
+            background: white;
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            border-bottom: 1px solid #e4e6eb;
+        }
+        body.theme-dark .back-bar {
+            border-bottom-color: #2a2a35;
+        }
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        /* المصادر */
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            padding: 16px;
+        }
         .lib-card {
-            background: #0d0d0d; border: 1px solid var(--border); border-radius: 15px;
-            padding: 40px 10px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background: white;
+            border-radius: 20px;
+            padding: 30px 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: 0.1s;
         }
-        .lib-card:active { transform: scale(0.95); border-color: var(--primary); }
-        .lib-card i { font-size: 45px; display: block; margin-bottom: 15px; }
-        .lib-card h3 { margin: 0; font-size: 15px; color: #fff; font-weight: 700; }
+        .lib-card:active {
+            transform: scale(0.97);
+        }
+        .lib-card i {
+            font-size: 44px;
+            display: block;
+            margin-bottom: 12px;
+        }
 
         .file-row {
-            background: #080808; padding: 22px; margin: 10px 15px; border: 1px solid var(--border);
-            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+            background: white;
+            margin: 10px 16px;
+            padding: 18px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+            gap: 12px;
+            flex-wrap: wrap;
         }
-        .file-info b { font-size: 15px; color: #fff; display: block; margin-bottom: 5px; }
-        .file-info span { font-size: 11px; color: var(--primary); font-family: 'Fira Code'; opacity: 0.8; }
-        .btn-order-now { background: var(--primary); color: #000; padding: 12px 25px; border-radius: 10px; font-weight: 900; font-size: 13px; cursor: pointer; }
+        .file-row > div {
+            flex: 1;
+            min-width: 120px;
+        }
+        .btn-order {
+            background: #1877f2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 13px;
+            white-space: nowrap;
+        }
 
-        #order-popup {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            display: none; align-items: center; justify-content: center; z-index: 5000; padding: 30px;
+        .settings-card {
+            background: white;
+            margin: 12px 16px;
+            padding: 20px;
+            border-radius: 20px;
         }
-        .popup-inner {
-            background: #0a0a0a; width: 100%; max-width: 420px; padding: 40px; border-radius: 30px;
-            border: 1px solid var(--primary); text-align: center;
+        .theme-option, .lang-option {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 30px;
+            cursor: pointer;
+            background: #f0f2f5;
         }
-        .popup-inner input {
-            width: 100%; padding: 18px; margin: 25px 0; background: #000; border: 1px solid #222;
-            color: #fff; border-radius: 12px; text-align: center; font-size: 16px; border-bottom: 2px solid var(--primary);
+        .theme-option.active, .lang-option.active {
+            background: #1877f2;
+            color: white;
         }
-        .btn-submit-tg { background: var(--primary); width: 100%; padding: 20px; border-radius: 12px; font-weight: 900; color: #000; cursor: pointer; font-size: 16px; }
 
-        nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px; background: #000;
-            border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 2000;
+        .profile-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 380px;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            transition: right 0.3s ease;
+            padding: 30px 20px;
+            overflow-y: auto;
         }
-        .nav-tab { color: #444; text-align: center; font-size: 11px; flex: 1; cursor: pointer; }
-        .nav-tab.active { color: var(--primary); }
-        .nav-tab i { font-size: 26px; display: block; margin-bottom: 3px; }
+        .profile-overlay.open {
+            right: 0;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #1877f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 15px;
+        }
+        .close-profile {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .contact-btn {
+            background: #1877f2;
+            color: white;
+            padding: 12px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 15px 0;
+            cursor: pointer;
+        }
 
-        .back-nav { background: #000; padding: 15px; display: none; align-items: center; border-bottom: 1px solid var(--border); }
-        .back-btn-circle { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--primary); display: flex; align-items: center; justify-content: center; color: var(--primary); cursor: pointer; margin-left: 15px; font-size: 20px; }
+        /* صفحة المسابقة - ثيمات متكيفة */
+        .contest-container {
+            width: 100%;
+            min-height: 75vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            transition: all 0.3s;
+        }
+        body.theme-light .contest-container {
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+            color: #1a1a1a;
+        }
+        body.theme-dark .contest-container {
+            background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
+            color: #e4e6eb;
+        }
+        .contest-image {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        .contest-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .contest-desc {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+        body.theme-light .contest-desc {
+            color: #4a4a4a;
+        }
+        body.theme-dark .contest-desc {
+            color: #ccc;
+        }
+        .contest-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .prize-btn {
+            background: #ffd700;
+            padding: 10px 25px;
+            border-radius: 30px;
+            color: #000;
+            font-weight: bold;
+        }
+        .date-btn {
+            background: #1877f2;
+            padding: 10px 25px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+        }
+        .contest-emojis {
+            margin-top: 30px;
+            font-size: 40px;
+        }
 
+        .soon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .soon-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .soon-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1877f2, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        #orderPopup {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+        .popup-card {
+            background: white;
+            padding: 30px;
+            border-radius: 32px;
+            width: 85%;
+            max-width: 340px;
+            text-align: center;
+        }
+        .popup-card input {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        .order-code {
+            background: #f0f2f5;
+            padding: 12px;
+            border-radius: 16px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .main-content::-webkit-scrollbar { width: 3px; }
+        .main-content::-webkit-scrollbar-thumb { background: #1877f2; border-radius: 10px; }
+
+        @media (max-width: 450px) {
+            .bottom-nav {
+                padding: 8px 8px;
+                gap: 2px;
+            }
+            .nav-item {
+                padding: 4px 4px;
+            }
+            .nav-item i {
+                font-size: 20px;
+            }
+            .nav-item span {
+                font-size: 9px;
+            }
+            .file-row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .btn-order {
+                width: 100%;
+            }
+            .library-grid {
+                gap: 10px;
+            }
+            .lib-card {
+                padding: 20px 8px;
+            }
+            .lib-card i {
+                font-size: 36px;
+            }
+            .lib-card h3 {
+                font-size: 13px;
+            }
+            .contest-title {
+                font-size: 24px;
+            }
+            .contest-emojis {
+                font-size: 30px;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="theme-light">
 
-    <div id="splash">
-        <div class="splash-content">
-            <div class="splash-logo">PIXEL3</div>
-            <div class="loader-container">
-                <div class="loader-bar" id="loader-bar"></div>
-            </div>
-            <div class="loader-text" id="loader-text">INITIALIZING_SYSTEM...</div>
+<div id="splash">
+    <div class="splash-logo">Pixel3</div>
+    <div class="loader-container"><div class="loader-bar" id="loaderBar"></div></div>
+    <div style="margin-top: 15px; color: white;">جاري التحميل...</div>
+</div>
+
+<div class="app-container" style="display: none;" id="app">
+    <div class="app-header">
+        <div class="logo">Pixel3</div>
+        <div class="header-icons">
+            <i class="fas fa-bell"></i>
+            <i class="fas fa-search"></i>
         </div>
     </div>
 
-    <div id="order-popup">
-        <div class="popup-inner">
-            <h2 style="color:var(--primary); margin:0; font-family:'Orbitron';">REQUEST ACCESS</h2>
-            <div id="file-code-display" style="font-family:'Fira Code'; font-size:12px; color:var(--primary); margin-top:15px; padding:10px; background:rgba(0,255,204,0.05); border-radius:8px;"></div>
-            <input type="text" id="cust-name" placeholder="أدخل اسمك الكريم">
-            <button class="btn-submit-tg" onclick="openDirectTelegram()">إرسال الطلب (فتح الشات)</button>
-            <p style="margin-top:25px; color:#444; font-size:12px; cursor:pointer;" onclick="closeOrder()">إلغاء العملية</p>
-        </div>
+    <div class="back-bar" id="backBar">
+        <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></div>
+        <span id="pageTitle" style="font-weight: 600;">الرئيسية</span>
     </div>
 
-    <header><div class="logo">PIXEL3</div></header>
+    <div class="main-content" id="mainContent"></div>
 
-    <div class="back-nav" id="back-nav">
-        <div class="back-btn-circle" onclick="goBack()">⬅</div>
-        <span id="page-title" style="font-weight:bold; color:var(--primary); font-size:15px;"></span>
+    <div class="bottom-nav">
+        <div class="nav-item" data-tab="library"><i class="fas fa-book"></i><span>المصادر</span></div>
+        <div class="nav-item" data-tab="contest"><i class="fas fa-trophy"></i><span>المسابقة</span></div>
+        <div class="nav-item active" data-tab="home"><i class="fas fa-home"></i><span>الرئيسية</span></div>
+        <div class="nav-item" data-tab="premium"><i class="fas fa-gem"></i><span>برامج مدفوعة</span></div>
+        <div class="nav-item" data-tab="settings"><i class="fas fa-user"></i><span>حسابي</span></div>
     </div>
+</div>
 
-    <main id="main-viewport"></main>
+<div id="orderPopup">
+    <div class="popup-card">
+        <i class="fas fa-microchip" style="font-size: 40px; color: #1877f2;"></i>
+        <h3 style="margin-bottom: 10px;">طلب المصدر</h3>
+        <div class="order-code" id="popupCode"></div>
+        <input type="text" id="userName" placeholder="أدخل اسمك">
+        <button class="btn-order" style="width: 100%;" onclick="sendRequest()">إرسال الطلب</button>
+        <p style="margin-top: 15px; cursor: pointer; color: #65676b;" onclick="closePopup()">إلغاء</p>
+    </div>
+</div>
 
-    <nav>
-        <div class="nav-tab active" onclick="switchTab('home', this)"><i>🏠</i><span>الرئيسية</span></div>
-        <div class="nav-tab" onclick="switchTab('lib', this)"><i>📚</i><span>المصادر</span></div>
-        <div class="nav-tab" onclick="switchTab('info', this)"><i>👤</i><span>حسابي</span></div>
-    </nav>
+<div id="profileOverlay" class="profile-overlay">
+    <div class="close-profile" onclick="closeProfile()"><i class="fas fa-times"></i></div>
+    <div id="profileContent"></div>
+</div>
 
-    <script>
-        const viewport = document.getElementById('main-viewport');
-        const bNav = document.getElementById('back-nav');
-        const pTitle = document.getElementById('page-title');
-        let historyStack = [];
-        let selectedFile = '';
-        const MY_USER = "killua_a"; 
+<script>
+    // ======================= البيانات =======================
+    let userState = {
+        theme: 'light',
+        language: 'ar',
+        postReactions: {}
+    };
 
-        // --- تشغيل شاشة التحميل الاحترافية ---
-        function runLoader() {
-            const bar = document.getElementById('loader-bar');
-            const text = document.getElementById('loader-text');
-            const statusMsgs = ["BOOTING_CORE...", "LOADING_RESOURCES...", "DECRYPTING_FILES...", "SYSTEM_READY"];
-            let width = 0;
-            
-            const interval = setInterval(() => {
-                width += Math.random() * 15;
-                if (width > 100) width = 100;
-                bar.style.width = width + '%';
-                
-                if(width < 30) text.innerText = statusMsgs[0];
-                else if(width < 60) text.innerText = statusMsgs[1];
-                else if(width < 90) text.innerText = statusMsgs[2];
-                else text.innerText = statusMsgs[3];
+    // 5 تفاعلات
+    const reactions = [
+        { emoji: "❤️", name: "like" },
+        { emoji: "😂", name: "haha" },
+        { emoji: "😮", name: "wow" },
+        { emoji: "😢", name: "sad" },
+        { emoji: "😡", name: "angry" }
+    ];
 
-                if (width === 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        const splash = document.getElementById('splash');
-                        splash.style.opacity = '0';
-                        setTimeout(() => splash.style.display = 'none', 800);
-                        renderHome();
-                    }, 500);
-                }
-            }, 200);
+    const admins = [
+        { id: "youssef", name: "Youssef", username: "@Youssef_free_Gaza", avatar: "👑", isOwner: true, role: "مالك Pixel3", telegram: "Youssef_free_Gaza", badges: ["👑", "⚡", "🔥", "🏆"], posts: [
+            { text: "مرحباً بكم في Pixel3! المنصة المتكاملة للمصادر التقنية. استعدوا للمسابقة الكبرى قريباً!", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80", time: "منذ ساعة", likes: 234 },
+            { text: "قريباً: مسابقة الأمن السيبراني بجوائز قيمة! شاركنا رأيك", time: "منذ يوم", likes: 567 }
+        ]},
+        { id: "killua", name: "Killua", username: "@killua_a", avatar: "⚡", isOwner: false, role: "Lead Developer", telegram: "killua_a", badges: ["💀", "⚡", "👑"], posts: [
+            { text: "تم تحديث قسم المصادر! كورسات وكتب جديدة. استكشف الآن", image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=600&q=80", time: "منذ 3 ساعات", likes: 189 }
+        ]}
+    ];
+
+    let posts = [
+        { id: 1, admin: admins[0], time: "منذ ساعة", text: "🔥 مرحباً بكم في Pixel3! المنصة المتكاملة للمصادر التقنية. استعدوا للمسابقة الكبرى قريباً!", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80", stats: { likes: 124, comments: 12, shares: 5 } },
+        { id: 2, admin: admins[1], time: "منذ 3 ساعات", text: "تم إضافة أدوات جديدة في قسم الأدوات! Nmap, Metasploit, Burp Suite. جربها الآن", image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=600&q=80", stats: { likes: 89, comments: 7, shares: 3 } },
+        { id: 3, admin: admins[0], time: "منذ 5 ساعات", text: "دليلك الكامل لتعلم الأمن السيبراني من الصفر للاحتراف. تجده في قسم كورسات ← عربي ← أمن سيبراني", image: "https://images.unsplash.com/photo-1629654291663-b91ad427698f?w=600&q=80", stats: { likes: 256, comments: 23, shares: 12 } }
+    ];
+
+    // هيكل المصادر
+    const categoriesData = {
+        main: [
+            { name: "📚 كورسات", icon: "fas fa-graduation-cap", target: "courses" },
+            { name: "📖 كتب", icon: "fas fa-book", target: "books" },
+            { name: "🛠️ أدوات", icon: "fas fa-tools", target: "tools" },
+            { name: "🗺️ Roadmaps", icon: "fas fa-map", target: "roadmaps" }
+        ],
+        courses: { title: "كورسات", subcategories: [{ name: "🇸🇦 عربي", target: "courses_ar" }, { name: "🇺🇸 English", target: "courses_en" }] },
+        courses_ar: { title: "كورسات عربية", fields: [
+            { name: "🛡️ أمن سيبراني", items: [{ name: "دليل الهاكر الأخلاقي الشامل", id: "AR_SEC_01" }, { name: "اختبار الاختراق من الصفر", id: "AR_SEC_02" }] },
+            { name: "🎨 فرونت اند", items: [{ name: "HTML/CSS/JS الكامل", id: "AR_FR_01" }, { name: "احتراف React.js", id: "AR_FR_02" }] },
+            { name: "⚙️ باك اند", items: [{ name: "Node.js و Express.js", id: "AR_BK_01" }] },
+            { name: "📱 مطور تطبيقات", items: [{ name: "Flutter", id: "AR_APP_01" }] },
+            { name: "🤖 ذكاء اصطناعي", items: [{ name: "Python للذكاء الاصطناعي", id: "AR_AI_01" }] }
+        ] },
+        courses_en: { title: "English Courses", fields: [
+            { name: "🛡️ Cyber Security", items: [{ name: "CEH v12", id: "EN_SEC_01" }] },
+            { name: "🎨 Front End", items: [{ name: "React.js Complete", id: "EN_FR_01" }] }
+        ] },
+        books: { title: "كتب", subcategories: [{ name: "🇸🇦 عربي", target: "books_ar" }, { name: "🇺🇸 English", target: "books_en" }] },
+        books_ar: { title: "كتب عربية", fields: [{ name: "🛡️ أمن سيبراني", items: [{ name: "فن الاختراق الأخلاقي", id: "BK_AR_SEC_01" }] }] },
+        books_en: { title: "English Books", fields: [{ name: "🛡️ Cyber Security", items: [{ name: "Web Hacking Handbook", id: "BK_EN_SEC_01" }] }] },
+        tools: { title: "أدوات", items: [{ name: "Nmap", id: "TOOL_01" }, { name: "Metasploit", id: "TOOL_02" }, { name: "Burp Suite", id: "TOOL_03" }] },
+        roadmaps: { title: "Roadmaps", items: [{ name: "خريطة الأمن السيبراني", id: "RM_01" }, { name: "خريطة Full Stack", id: "RM_02" }] }
+    };
+
+    let historyStack = [];
+    let currentSelectedFile = "";
+    let activeReactionPicker = null;
+
+    // الترجمة
+    const translations = {
+        ar: {
+            library: "المصادر", home: "الرئيسية", contest: "المسابقة", premium: "برامج مدفوعة", settings: "حسابي",
+            like: "إعجاب", comment: "تعليق", share: "مشاركة", coming_soon: "قريباً جداً!", preparing: "جاري التحضير لمفاجأة كبيرة",
+            theme: "الثيم", light: "فاتح", dark: "داكن", language: "اللغة", arabic: "العربية", english: "English",
+            team: "فريق Pixel3", achievements: "إنجازاتي", requests: "الطلبات", level: "المستوى"
+        },
+        en: {
+            library: "Library", home: "Home", contest: "Contest", premium: "Premium", settings: "Profile",
+            like: "Like", comment: "Comment", share: "Share", coming_soon: "Coming Soon!", preparing: "Preparing a big surprise",
+            theme: "Theme", light: "Light", dark: "Dark", language: "Language", arabic: "العربية", english: "English",
+            team: "Pixel3 Team", achievements: "My Achievements", requests: "Requests", level: "Level"
         }
-        runLoader();
+    };
 
-        const MASTER_DATA = {
-            lib: {
-                title: "مكتبة المصادر",
-                items: [
-                    { name: "كورسات عربية", icon: "🇸🇦", target: "c_ar_root" },
-                    { name: "English Courses", icon: "🇺🇸", target: "c_en_root" },
-                    { name: "خرائط الطريق", icon: "🗺", target: "rm_root" },
-                    { name: "مكتبة الكتب", icon: "📚", target: "books_root" }
-                ]
-            },
-            c_ar_root: {
-                title: "المجالات التقنية (عربي)",
-                items: [
-                    { name: "السايبر سيكيورتي", icon: "🛡", target: "c_ar_cyber" },
-                    { name: "فرونت اند (Front-End)", icon: "🎨", target: "c_ar_front" },
-                    { name: "باك اند (Back-End)", icon: "⚙️", target: "c_ar_back" },
-                    { name: "الذكاء الاصطناعي", icon: "🤖", target: "c_ar_ai" },
-                    { name: "تطوير التطبيقات", icon: "📱", target: "c_ar_app" }
-                ]
-            },
-            c_ar_cyber: {
-                title: "كورسات السايبر (عربي)",
-                type: "list",
-                items: [
-                    { name: "كورس الهاكر الأخلاقي الكامل", id: "AR_CY_01" },
-                    { name: "اختبار اختراق المواقع", id: "AR_CY_02" },
-                    { name: "التحقيق الجنائي الرقمي", id: "AR_CY_03" },
-                    { name: "أمن الشبكات للمحترفين", id: "AR_CY_04" }
-                ]
-            },
-            c_ar_front: {
-                title: "Front-End (عربي)",
-                type: "list",
-                items: [
-                    { name: "دبلومة HTML/CSS/JS", id: "AR_FR_01" },
-                    { name: "احتراف React.js", id: "AR_FR_02" },
-                    { name: "تصميم واجهات UI/UX", id: "AR_FR_03" }
-                ]
-            },
-            c_ar_back: {
-                title: "Back-End (عربي)",
-                type: "list",
-                items: [
-                    { name: "تعلم Node.js & Express", id: "AR_BK_01" },
-                    { name: "تطوير المواقع بـ PHP/Laravel", id: "AR_BK_02" },
-                    { name: "قواعد البيانات SQL & NoSQL", id: "AR_BK_03" }
-                ]
-            },
-            c_ar_ai: {
-                title: "الذكاء الاصطناعي (عربي)",
-                type: "list",
-                items: [
-                    { name: "أساسيات Python للذكاء", id: "AR_AI_01" },
-                    { name: "تعلم الآلة (Machine Learning)", id: "AR_AI_02" },
-                    { name: "بناء الشات بوت بالذكاء", id: "AR_AI_03" }
-                ]
-            },
-            c_en_root: {
-                title: "Tech Tracks (EN)",
-                items: [
-                    { name: "Cyber Security Pro", icon: "🛡", target: "c_en_cyber" },
-                    { name: "Full Stack Development", icon: "💻", target: "c_en_full" },
-                    { name: "Data Science & AI", icon: "📊", target: "c_en_ai" }
-                ]
-            },
-            c_en_cyber: {
-                title: "Cyber (EN)",
-                type: "list",
-                items: [
-                    { name: "Google Cyber Security Certificate", id: "EN_CY_01" },
-                    { name: "CompTIA Security+ SY0-701", id: "EN_CY_02" },
-                    { name: "TryHackMe Pathways Full", id: "EN_CY_03" }
-                ]
-            },
-            books_root: {
-                title: "المكتبة الرقمية",
-                items: [
-                    { name: "كتب البرمجة", icon: "💻", target: "b_code" },
-                    { name: "كتب الأمن السيبراني", icon: "🔐", target: "b_sec" },
-                    { name: "كتب ريادة الأعمال", icon: "📈", target: "b_bus" }
-                ]
-            },
-            b_code: {
-                title: "كتب البرمجة",
-                type: "list",
-                items: [
-                    { name: "كتاب Clean Code (مترجم)", id: "BK_CD_01" },
-                    { name: "خوارزميات البرمجة ببساطة", id: "BK_CD_02" },
-                    { name: "مرجع JavaScript الشامل", id: "BK_CD_03" }
-                ]
-            },
-            rm_root: {
-                title: "خرائط الطريق 2026",
-                type: "list",
-                items: [
-                    { name: "Roadmap: Offensive Security", id: "RM_01" },
-                    { name: "Roadmap: DevOps Engineer", id: "RM_02" },
-                    { name: "Roadmap: Mobile Dev (Flutter)", id: "RM_03" }
-                ]
-            }
-        };
+    function t(key) {
+        return translations[userState.language][key] || key;
+    }
 
-        function renderHome() {
-            bNav.style.display = 'none';
-            historyStack = [];
-            viewport.innerHTML = `
-                <div class="fb-post">
-                    <div class="p-header">
-                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=P3" class="p-pfp">
-                        <div class="p-user-info">
-                            <div class="p-username">Pixel3 <img src="https://img.icons8.com/color/48/verified-badge.png" class="v-badge"></div>
-                            <div class="p-date">منشور مثبت • 📌</div>
-                        </div>
-                    </div>
-                    <div class="p-body">
-                        مرحباً بك في نظام <b>Pixel3</b> المتكامل. 🚀 تم تحديث قسم المصادر ليشمل كافة التخصصات (Front-End, Back-End, AI, Cyber Security).<br><br> تصفح الأقسام الآن واطلب ما تحتاجه بكل سهولة.
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80" class="p-image">
-                    <div class="p-metrics">
-                        <div class="p-reacts"><span style="background:#1877f2;">👍</span><span style="background:#f33;">❤️</span><span style="background:#ffd700;">🔥</span><p style="margin:0 8px;">15.4K</p></div>
-                        <div>8K مشاركة</div>
-                    </div>
-                    <div class="p-actions">
-                        <div class="action-btn" onclick="fbReact()">إعجاب</div>
-                        <div class="action-btn">تعليق</div>
-                        <div class="action-btn">مشاركة</div>
+    function loadState() {
+        const saved = localStorage.getItem('pixel3_state');
+        if(saved) {
+            try {
+                const p = JSON.parse(saved);
+                userState.theme = p.theme || 'light';
+                userState.language = p.language || 'ar';
+                userState.postReactions = p.postReactions || {};
+            } catch(e) {}
+        }
+        document.body.className = `theme-${userState.theme}`;
+        applyLanguage();
+    }
+    function saveState() {
+        localStorage.setItem('pixel3_state', JSON.stringify({ theme: userState.theme, language: userState.language, postReactions: userState.postReactions }));
+    }
+    function applyLanguage() {
+        document.documentElement.setAttribute('dir', userState.language === 'ar' ? 'rtl' : 'ltr');
+        document.documentElement.lang = userState.language === 'ar' ? 'ar' : 'en';
+        document.querySelectorAll('.nav-item').forEach(item => {
+            const tab = item.getAttribute('data-tab');
+            if(tab === 'library') item.querySelector('span').innerText = t('library');
+            else if(tab === 'home') item.querySelector('span').innerText = t('home');
+            else if(tab === 'contest') item.querySelector('span').innerText = t('contest');
+            else if(tab === 'premium') item.querySelector('span').innerText = t('premium');
+            else if(tab === 'settings') item.querySelector('span').innerText = t('settings');
+        });
+        if(document.querySelector('.action-btn')) renderHome();
+        if(document.querySelector('.settings-card')) renderSettings();
+    }
+
+    function setLanguage(lang) {
+        userState.language = lang;
+        saveState();
+        applyLanguage();
+        renderSettings();
+        if(currentTab === 'home') renderHome();
+        else if(currentTab === 'library') renderLibrary();
+        else if(currentTab === 'contest') renderContest();
+        else if(currentTab === 'premium') renderPremium();
+    }
+
+    function createFloatEmoji(emoji, x, y) {
+        const floatDiv = document.createElement('div');
+        floatDiv.className = 'float-emoji';
+        floatDiv.innerHTML = emoji;
+        floatDiv.style.left = (x - 20) + 'px';
+        floatDiv.style.top = (y - 30) + 'px';
+        document.body.appendChild(floatDiv);
+        setTimeout(() => floatDiv.remove(), 800);
+        if(navigator.vibrate) navigator.vibrate(30);
+    }
+
+    function showReactionPicker(postId, buttonElement, event) {
+        if(activeReactionPicker) activeReactionPicker.remove();
+        const picker = document.createElement('div');
+        picker.className = 'reaction-picker';
+        picker.innerHTML = reactions.map(r => `<div class="reaction-emoji" data-emoji="${r.emoji}">${r.emoji}</div>`).join('');
+        const rect = buttonElement.getBoundingClientRect();
+        picker.style.bottom = (window.innerHeight - rect.top + 15) + 'px';
+        picker.style.left = (rect.left + rect.width/2 - 110) + 'px';
+        document.body.appendChild(picker);
+        activeReactionPicker = picker;
+        picker.querySelectorAll('.reaction-emoji').forEach(emojiDiv => {
+            emojiDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const emoji = emojiDiv.getAttribute('data-emoji');
+                createFloatEmoji(emoji, event.clientX, event.clientY);
+                const oldReaction = userState.postReactions[postId];
+                userState.postReactions[postId] = emoji;
+                const post = posts.find(p => p.id === postId);
+                if(post) {
+                    if(!oldReaction) post.stats.likes++;
+                    else if(oldReaction !== emoji) {}
+                }
+                saveState();
+                picker.remove();
+                activeReactionPicker = null;
+                renderHome();
+            });
+        });
+        setTimeout(() => {
+            const closeHandler = (e) => {
+                if(picker && !picker.contains(e.target)) {
+                    picker.remove();
+                    activeReactionPicker = null;
+                    document.removeEventListener('click', closeHandler);
+                }
+            };
+            document.addEventListener('click', closeHandler);
+        }, 100);
+    }
+
+    function openProfile(adminId) {
+        const admin = admins.find(a => a.id === adminId);
+        if(!admin) return;
+        document.getElementById('profileContent').innerHTML = `
+            <div style="text-align:center;">
+                <div class="profile-avatar">${admin.avatar}</div>
+                <h2>${admin.name} ${admin.isOwner ? '<span class="owner-badge">المالك</span>' : ''}</h2>
+                <div style="color:#65676b;">${admin.role}</div>
+                <div style="margin:10px 0;">${admin.username}</div>
+                <div style="display:flex; gap:10px; justify-content:center; margin:15px 0; flex-wrap:wrap;">${admin.badges.map(b => `<span style="font-size:28px;">${b}</span>`).join('')}</div>
+                <div class="contact-btn" onclick="window.open('https://t.me/${admin.telegram}', '_blank')"><i class="fab fa-telegram"></i> تواصل عبر تليجرام</div>
+            </div>
+            <div style="margin-top:20px;"><h3>منشورات ${admin.name}</h3></div>
+            ${admin.posts.map(p => `<div class="fb-post" style="margin:10px 0;"><div class="post-text">${p.text}</div>${p.image ? `<img src="${p.image}" class="post-image">` : ''}<div class="post-stats"><span>❤️ ${p.likes}</span></div></div>`).join('')}
+        `;
+        document.getElementById('profileOverlay').classList.add('open');
+    }
+
+    function closeProfile() { document.getElementById('profileOverlay').classList.remove('open'); }
+
+    function renderHome() {
+        const container = document.getElementById('mainContent');
+        container.innerHTML = posts.map(post => {
+            const reaction = userState.postReactions[post.id];
+            return `
+            <div class="fb-post">
+                <div class="post-header">
+                    <div class="post-avatar" onclick="openProfile('${post.admin.id}')">${post.admin.avatar}</div>
+                    <div class="post-user-info" onclick="openProfile('${post.admin.id}')">
+                        <div class="post-username">${post.admin.name} ${post.admin.isOwner ? '<span class="owner-badge">المالك</span>' : ''} <i class="fas fa-check-circle verified-badge"></i></div>
+                        <div class="post-time">${post.time}</div>
                     </div>
                 </div>
-            `;
-            gsap.from(".fb-post", { opacity: 0, y: 20 });
+                <div class="post-text">${post.text}</div>
+                ${post.image ? `<img src="${post.image}" class="post-image">` : ''}
+                <div class="post-stats">
+                    <span>${reaction || '👍'} ${post.stats.likes}</span>
+                    <span>💬 ${post.stats.comments}</span>
+                    <span>📤 ${post.stats.shares}</span>
+                </div>
+                <div class="post-actions">
+                    <div class="action-btn ${reaction ? 'has-reaction' : ''}" onclick="showReactionPicker(${post.id}, this, event)">
+                        <i class="fas ${reaction === '❤️' ? 'fa-heart' : 'fa-thumbs-up'}"></i> ${reaction ? reaction : t('like')}
+                    </div>
+                    <div class="action-btn"><i class="far fa-comment"></i> ${t('comment')}</div>
+                    <div class="action-btn"><i class="far fa-share-square"></i> ${t('share')}</div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function renderLibrary() {
+        const container = document.getElementById('mainContent');
+        container.innerHTML = `<div class="library-grid">${categoriesData.main.map(cat => `<div class="lib-card" onclick="openCategory('${cat.target}')"><i class="${cat.icon}"></i><h3>${cat.name}</h3></div>`).join('')}</div>`;
+    }
+
+    function openCategory(key) {
+        const data = categoriesData[key];
+        if(!data) return;
+        historyStack.push({ type: 'category', key: key, title: data.title });
+        document.getElementById('backBar').style.display = 'flex';
+        document.getElementById('pageTitle').innerText = data.title;
+        const container = document.getElementById('mainContent');
+        if(data.subcategories) {
+            container.innerHTML = `<div class="library-grid">${data.subcategories.map(sub => `<div class="lib-card" onclick="openCategory('${sub.target}')"><i class="fas fa-folder-open"></i><h3>${sub.name}</h3></div>`).join('')}</div>`;
+        } else if(data.fields) {
+            container.innerHTML = `<div class="library-grid">${data.fields.map((field, idx) => `<div class="lib-card" onclick="openField('${key}', ${idx})"><i class="fas fa-folder"></i><h3>${field.name}</h3></div>`).join('')}</div>`;
+        } else if(data.items) {
+            container.innerHTML = data.items.map(item => `<div class="file-row"><div><b>${item.name}</b><br><span style="font-size:11px;color:#1877f2;">${item.id}</span></div><button class="btn-order" onclick="openOrder('${item.id}')">طلب</button></div>`).join('');
         }
+    }
 
-        function renderPage(key) {
-            const data = MASTER_DATA[key];
-            if(!data) return;
-            bNav.style.display = 'flex';
-            pTitle.innerText = data.title;
+    function openField(parentKey, fieldIndex) {
+        const parent = categoriesData[parentKey];
+        const field = parent.fields[fieldIndex];
+        if(field) {
+            historyStack.push({ type: 'field', key: parentKey, fieldIndex: fieldIndex, title: field.name });
+            document.getElementById('backBar').style.display = 'flex';
+            document.getElementById('pageTitle').innerText = field.name;
+            const container = document.getElementById('mainContent');
+            container.innerHTML = field.items.map(item => `<div class="file-row"><div><b>${item.name}</b><br><span style="font-size:11px;color:#1877f2;">${item.id}</span></div><button class="btn-order" onclick="openOrder('${item.id}')">طلب</button></div>`).join('');
+        }
+    }
 
-            if(data.type === 'list') {
-                let html = '<div style="padding-top:10px;">';
-                data.items.forEach(item => {
-                    html += `
-                    <div class="file-row">
-                        <div class="file-info">
-                            <b>${item.name}</b>
-                            <span>VERIFIED_FILE: ${item.id}</span>
-                        </div>
-                        <button class="btn-order-now" onclick="openOrder('${item.id}')">طلب</button>
-                    </div>`;
-                });
-                viewport.innerHTML = html + '</div>';
-                gsap.from(".file-row", { x: -30, opacity: 0, stagger: 0.05 });
+    function renderContest() {
+        const container = document.getElementById('mainContent');
+        container.innerHTML = `
+            <div class="contest-container">
+                <img src="https://i.postimg.cc/gkv3tndr/1.png" class="contest-image" alt="مسابقة الأمن السيبراني" onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80'">
+                <div class="contest-title">🏆 مسابقة الأمن السيبراني 🏆</div>
+                <div class="contest-desc">اشترك الآن واربح جوائز قيمة! المسابقة تبدأ قريباً</div>
+                <div class="contest-buttons">
+                    <div class="prize-btn">🎁 جوائز</div>
+                    <div class="date-btn">📅 قريباً</div>
+                </div>
+                <div class="contest-emojis">🔥 ⚡ 💀 🛡️</div>
+            </div>
+        `;
+    }
+
+    function renderPremium() {
+        const container = document.getElementById('mainContent');
+        container.innerHTML = `
+            <div class="soon-container">
+                <div class="soon-emoji">💎⭐🌟✨</div>
+                <div class="soon-title">${t('coming_soon')}</div>
+                <p style="font-size:18px; margin:10px 0;">برامج مدفوعة</p>
+                <p style="color:#65676b;">${t('preparing')}</p>
+                <div style="margin-top:30px; font-size:14px; background:rgba(24,119,242,0.1); padding:15px; border-radius:20px;">
+                    <i class="fas fa-clock"></i> سيتم الإعلان عن التفاصيل قريباً
+                    <div style="margin-top:10px; font-size:30px;">🎯 ⚡ 💎</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderSettings() {
+        const container = document.getElementById('mainContent');
+        container.innerHTML = `
+            <div class="settings-card"><h3><i class="fas fa-palette"></i> ${t('theme')}</h3><div><div class="theme-option ${userState.theme === 'light' ? 'active' : ''}" onclick="setTheme('light')">☀️ ${t('light')}</div><div class="theme-option ${userState.theme === 'dark' ? 'active' : ''}" onclick="setTheme('dark')">🌙 ${t('dark')}</div></div></div>
+            <div class="settings-card"><h3><i class="fas fa-language"></i> ${t('language')}</h3><div><div class="lang-option ${userState.language === 'ar' ? 'active' : ''}" onclick="setLanguage('ar')">🇸🇦 ${t('arabic')}</div><div class="lang-option ${userState.language === 'en' ? 'active' : ''}" onclick="setLanguage('en')">🇬🇧 ${t('english')}</div></div></div>
+            <div class="settings-card"><h3><i class="fas fa-crown"></i> ${t('team')}</h3>${admins.map(admin => `<div style="display:flex; align-items:center; gap:12px; margin:10px 0; cursor:pointer;" onclick="openProfile('${admin.id}')"><div style="width:45px;height:45px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center;font-size:22px;">${admin.avatar}</div><div><strong>${admin.name}</strong> ${admin.isOwner ? '<span class="owner-badge">المالك</span>' : ''}<br><small>${admin.role}</small></div></div>`).join('')}</div>
+            <div class="settings-card"><h3><i class="fas fa-chart-line"></i> ${t('achievements')}</h3><p>🎭 ${t('requests')}: ${Object.keys(userState.postReactions).length}</p><p>⭐ ${t('level')}: ${Math.floor(Object.keys(userState.postReactions).length / 3) + 1}</p></div>
+        `;
+    }
+
+    function setTheme(theme) { userState.theme = theme; document.body.className = `theme-${theme}`; saveState(); renderSettings(); }
+
+    function openOrder(fileId) { currentSelectedFile = fileId; document.getElementById('popupCode').innerHTML = `كود: ${fileId}_${Date.now().toString(36)}`; document.getElementById('orderPopup').style.display = 'flex'; }
+    function closePopup() { document.getElementById('orderPopup').style.display = 'none'; }
+    function sendRequest() {
+        const name = document.getElementById('userName').value;
+        if(!name) return alert('أدخل اسمك');
+        window.open(`https://t.me/Pixel3_Support_bot?text=${encodeURIComponent(`مرحباً، أنا ${name}\nأريد الملف: ${currentSelectedFile}`)}`, '_blank');
+        closePopup();
+    }
+
+    function goBack() {
+        if(historyStack.length > 0) {
+            historyStack.pop();
+            if(historyStack.length === 0) {
+                document.getElementById('backBar').style.display = 'none';
+                switchTab('library');
             } else {
-                let html = '<div class="lib-grid">';
-                data.items.forEach(cat => {
-                    html += `
-                    <div class="lib-card" onclick="navigateTo('${cat.target}')">
-                        <i>${cat.icon}</i>
-                        <h3>${cat.name}</h3>
-                    </div>`;
-                });
-                viewport.innerHTML = html + '</div>';
-                gsap.from(".lib-card", { scale: 0.8, opacity: 0, stagger: 0.05 });
+                const last = historyStack[historyStack.length-1];
+                if(last.type === 'category') openCategory(last.key);
+                else if(last.type === 'field') openField(last.key, last.fieldIndex);
             }
+        } else {
+            document.getElementById('backBar').style.display = 'none';
+            switchTab('library');
         }
+    }
 
-        function navigateTo(key) { historyStack.push(key); renderPage(key); viewport.scrollTo(0,0); }
-        function goBack() { historyStack.pop(); if(historyStack.length === 0) renderHome(); else renderPage(historyStack[historyStack.length-1]); }
+    let currentTab = 'home';
+    function switchTab(tabName) {
+        currentTab = tabName;
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        historyStack = [];
+        document.getElementById('backBar').style.display = 'none';
+        if(tabName === 'home') renderHome();
+        else if(tabName === 'library') renderLibrary();
+        else if(tabName === 'contest') renderContest();
+        else if(tabName === 'premium') renderPremium();
+        else if(tabName === 'settings') renderSettings();
+    }
 
-        function switchTab(tab, el) {
-            document.querySelectorAll('.nav-tab').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            if(tab === 'home') renderHome();
-            else { historyStack = [tab]; renderPage(tab); }
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => switchTab(item.getAttribute('data-tab')));
+    });
+
+    let width = 0;
+    const loaderInterval = setInterval(() => {
+        width += Math.random() * 20;
+        if(width >= 100) {
+            width = 100;
+            clearInterval(loaderInterval);
+            setTimeout(() => {
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    document.getElementById('app').style.display = 'flex';
+                    renderHome();
+                }, 500);
+            }, 300);
         }
+        document.getElementById('loaderBar').style.width = width + '%';
+    }, 150);
 
-        function openOrder(id) {
-            selectedFile = id;
-            document.getElementById('file-code-display').innerText = "كود الملف: " + id;
-            document.getElementById('order-popup').style.display = 'flex';
-        }
-        function closeOrder() { document.getElementById('order-popup').style.display = 'none'; }
-
-        function openDirectTelegram() {
-            const name = document.getElementById('cust-name').value;
-            if(!name) return alert("يرجى إدخال اسمك!");
-            const message = `مرحباً @${MY_USER}،\n\nأنا: ${name}\nمحتاج الملف ده من تطبيق Pixel3:\n📦 كود: ${selectedFile}`;
-            window.open(`https://t.me/${MY_USER}?text=${encodeURIComponent(message)}`, '_blank');
-            closeOrder();
-        }
-
-        function fbReact() {
-            const r = document.createElement('div');
-            r.innerText = "❤️";
-            r.style.cssText = `position:fixed; left:50%; top:50%; font-size:60px; pointer-events:none; z-index:9999;`;
-            document.body.appendChild(r);
-            gsap.to(r, { y: -300, opacity: 0, scale: 3, duration: 1, onComplete: () => r.remove() });
-        }
-
-        // --- DATA INFLATION (للمحافظة على حجم الكود) ---
-        for(let i=0; i<1200; i++) {
-            // Processing Pixel3 Infinity Core...
-        }
-    </script>
+    loadState();
+</script>
 </body>
 </html>
