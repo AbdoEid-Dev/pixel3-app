@@ -2,975 +2,97 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Pixel3 - التطبيق المتكامل مع التحقق</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Pixel3 - طلب الرقم</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         body {
-            font-family: 'Tajawal', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            transition: background 0.3s, color 0.3s;
-        }
-        body.theme-light {
-            background: #f0f2f5;
-            color: #1a1a1a;
-        }
-        body.theme-dark {
-            background: #0a0a0f;
-            color: #e4e6eb;
-        }
-        body.theme-dark .app-header,
-        body.theme-dark .back-bar,
-        body.theme-dark .fb-post,
-        body.theme-dark .lib-card,
-        body.theme-dark .file-row,
-        body.theme-dark .settings-card,
-        body.theme-dark .profile-overlay,
-        body.theme-dark .popup-card,
-        body.theme-dark .reaction-picker {
-            background: #14141f;
-            color: #e4e6eb;
-        }
-        body.theme-dark .post-stats,
-        body.theme-dark .post-time,
-        body.theme-dark .stat-label {
-            color: #a0a0b0;
-        }
-        body.theme-dark .bottom-nav {
-            background: rgba(20, 20, 31, 0.96);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        body.theme-dark .nav-item {
-            color: #a0a0b0;
-        }
-        body.theme-dark .nav-item.active {
-            background: #1877f2;
-            color: white;
-        }
-        body.theme-dark .popup-card input {
-            background: #0a0a0f;
-            border-color: #2a2a35;
-            color: white;
-        }
-        body.theme-dark .back-btn {
-            background: #0a0a0f;
-            color: white;
-        }
-        body.theme-dark .theme-option,
-        body.theme-dark .lang-option {
-            background: #0a0a0f;
-            color: #e4e6eb;
-        }
-        body.theme-dark .action-btn {
-            color: #a0a0b0;
-        }
-        body.theme-dark .action-btn:active {
-            background: #0a0a0f;
-        }
-        body.theme-dark .order-code {
-            background: #0a0a0f !important;
-            color: #e4e6eb !important;
-        }
-
-        /* Hero Section الجديد */
-        .hero-section {
-            background: linear-gradient(135deg, #1877f2, #00a3ff);
-            margin: 16px;
-            padding: 30px 20px;
-            border-radius: 32px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            transition: all 0.3s;
-        }
-        body.theme-dark .hero-section {
-            background: linear-gradient(135deg, #0f2b5e, #0055aa);
-        }
-        .hero-title {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-        .hero-sub {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 24px;
-        }
-        .hero-btn {
-            background: white;
-            color: #1877f2;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 60px;
-            font-size: 18px;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .hero-btn:active {
-            transform: scale(0.96);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
-        body.theme-dark .hero-btn {
-            background: #f0f2f5;
-            color: #0e5fd9;
-        }
-        .hero-btn i {
-            font-size: 24px;
-        }
-
-        #splash {
-            position: fixed;
-            inset: 0;
-            background: #1877f2;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1877f2, #0a58ca);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .splash-logo {
-            font-size: 52px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 30px;
-        }
-        .loader-container {
-            width: 200px;
-            height: 3px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .loader-bar {
-            width: 0%;
-            height: 100%;
+        .card {
             background: white;
-            transition: width 0.2s;
-        }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            position: relative;
-        }
-
-        .app-header {
-            background: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e4e6eb;
-        }
-        body.theme-dark .app-header {
-            border-bottom-color: #2a2a35;
+            padding: 40px 30px;
+            border-radius: 48px;
+            text-align: center;
+            max-width: 320px;
+            width: 85%;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
         }
         .logo {
-            font-size: 22px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1877f2, #0e5fd9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 64px;
+            margin-bottom: 20px;
         }
-        .header-icons {
-            display: flex;
-            gap: 18px;
+        h1 {
+            font-size: 26px;
+            color: #1e2a3a;
+            margin: 0 0 10px;
         }
-        .header-icons i {
-            font-size: 20px;
-            color: #65676b;
-            cursor: pointer;
-        }
-
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 90px;
-        }
-
-        /* البوستات */
-        .fb-post {
-            background: white;
-            margin: 12px 16px;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .post-header {
-            display: flex;
-            padding: 14px;
-            gap: 12px;
-            align-items: center;
-        }
-        .post-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #1877f2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-        }
-        .post-user-info {
-            flex: 1;
-            cursor: pointer;
-        }
-        .post-username {
-            font-weight: 700;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        .verified-badge {
-            color: #1877f2;
-            font-size: 13px;
-        }
-        .owner-badge {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #000;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 20px;
-        }
-        .post-time {
-            font-size: 11px;
-            color: #65676b;
-        }
-        .post-text {
-            padding: 0 14px 12px 14px;
-            font-size: 14px;
+        p {
+            color: #4a5568;
+            margin-bottom: 30px;
             line-height: 1.5;
         }
-        .post-image {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-        }
-        .post-stats {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 14px;
-            border-top: 1px solid #e4e6eb;
-            font-size: 12px;
-            color: #65676b;
-        }
-        body.theme-dark .post-stats {
-            border-top-color: #2a2a35;
-        }
-        .post-actions {
-            display: flex;
-            padding: 6px 12px 12px 12px;
-            gap: 8px;
-        }
-        .action-btn {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #65676b;
-            transition: 0.1s;
-        }
-        .action-btn:active {
-            background: #f0f2f5;
-            transform: scale(0.98);
-        }
-        body.theme-dark .action-btn:active {
-            background: #0a0a0f;
-        }
-        .action-btn.has-reaction {
-            color: #e0245e;
-        }
-        .action-btn.has-reaction i {
-            color: #e0245e;
-        }
-
-        /* منتقي التفاعلات */
-        .reaction-picker {
-            position: fixed;
-            background: white;
-            border-radius: 60px;
-            padding: 10px 20px;
-            display: flex;
-            gap: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 2000;
-            animation: fadeInUp 0.2s ease;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .reaction-emoji {
-            font-size: 32px;
-            cursor: pointer;
-            transition: 0.1s;
-            padding: 5px;
-        }
-        .reaction-emoji:active {
-            transform: scale(1.3);
-        }
-
-        .float-emoji {
-            position: fixed;
-            font-size: 40px;
-            pointer-events: none;
-            z-index: 2000;
-            animation: floatUp 0.8s ease-out forwards;
-        }
-        @keyframes floatUp {
-            0% { transform: scale(0.5) translateY(0); opacity: 1; }
-            100% { transform: scale(1.5) translateY(-80px); opacity: 0; }
-        }
-
-        /* الشريط السفلي - متجاوب بالكامل */
-        .bottom-nav {
-            position: fixed;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 10px 12px;
-            display: flex;
-            gap: 4px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 100;
-            width: calc(100% - 32px);
-            max-width: 480px;
-            justify-content: space-around;
-        }
-        .nav-item {
-            text-align: center;
-            cursor: pointer;
-            padding: 6px 8px;
-            border-radius: 40px;
-            transition: 0.2s;
-            color: #65676b;
-            flex: 1;
-            min-width: 0;
-        }
-        .nav-item i {
-            font-size: 22px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .nav-item span {
-            font-size: 10px;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .nav-item.active {
-            background: #1877f2;
-            color: white;
-        }
-
-        .back-bar {
-            background: white;
-            padding: 12px 16px;
-            display: none;
-            align-items: center;
-            border-bottom: 1px solid #e4e6eb;
-        }
-        body.theme-dark .back-bar {
-            border-bottom-color: #2a2a35;
-        }
-        .back-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #f0f2f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        /* المصادر */
-        .library-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-            padding: 16px;
-        }
-        .lib-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 12px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: 0.1s;
-        }
-        .lib-card:active {
-            transform: scale(0.97);
-        }
-        .lib-card i {
-            font-size: 44px;
-            display: block;
-            margin-bottom: 12px;
-        }
-
-        .file-row {
-            background: white;
-            margin: 10px 16px;
-            padding: 18px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .file-row > div {
-            flex: 1;
-            min-width: 120px;
-        }
-        .btn-order {
-            background: #1877f2;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
+        .btn {
+            background: linear-gradient(135deg, #1877f2, #00a3ff);
             border: none;
-            font-size: 13px;
-            white-space: nowrap;
-        }
-
-        .settings-card {
-            background: white;
-            margin: 12px 16px;
-            padding: 20px;
-            border-radius: 20px;
-        }
-        .theme-option, .lang-option {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 30px;
-            cursor: pointer;
-            background: #f0f2f5;
-        }
-        .theme-option.active, .lang-option.active {
-            background: #1877f2;
+            padding: 16px 24px;
+            width: 100%;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: bold;
             color: white;
-        }
-
-        .profile-overlay {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 85%;
-            max-width: 380px;
-            height: 100%;
-            background: white;
-            z-index: 2000;
-            transition: right 0.3s ease;
-            padding: 30px 20px;
-            overflow-y: auto;
-        }
-        .profile-overlay.open {
-            right: 0;
-        }
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #1877f2;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            margin: 0 auto 15px;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        .close-profile {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn i {
             font-size: 24px;
-            cursor: pointer;
         }
-        .contact-btn {
-            background: #1877f2;
-            color: white;
-            padding: 12px;
-            border-radius: 30px;
-            text-align: center;
-            margin: 15px 0;
-            cursor: pointer;
-        }
-
-        /* صفحة المسابقة - ثيمات متكيفة */
-        .contest-container {
-            width: 100%;
-            min-height: 75vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            transition: all 0.3s;
-        }
-        body.theme-light .contest-container {
-            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
-            color: #1a1a1a;
-        }
-        body.theme-dark .contest-container {
-            background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
-            color: #e4e6eb;
-        }
-        .contest-image {
-            width: 100%;
-            max-width: 350px;
-            border-radius: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-        .contest-title {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffd700, #ff6600);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .contest-desc {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 0 20px;
-        }
-        body.theme-light .contest-desc {
-            color: #4a4a4a;
-        }
-        body.theme-dark .contest-desc {
-            color: #ccc;
-        }
-        .contest-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .prize-btn {
-            background: #ffd700;
-            padding: 10px 25px;
-            border-radius: 30px;
-            color: #000;
-            font-weight: bold;
-        }
-        .date-btn {
-            background: #1877f2;
-            padding: 10px 25px;
-            border-radius: 30px;
-            color: white;
-            font-weight: bold;
-        }
-        .contest-emojis {
-            margin-top: 30px;
-            font-size: 40px;
-        }
-
-        .soon-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 60vh;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .soon-emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: bounce 1s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        .soon-title {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1877f2, #00ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-
-        #orderPopup {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 5000;
-        }
-        .popup-card {
-            background: white;
-            padding: 30px;
-            border-radius: 32px;
-            width: 85%;
-            max-width: 340px;
-            text-align: center;
-        }
-        .popup-card input {
-            width: 100%;
-            padding: 14px;
-            margin: 15px 0;
-            border: 1px solid #ddd;
-            border-radius: 16px;
-            font-family: inherit;
-            font-size: 14px;
-        }
-        .order-code {
-            background: #f0f2f5;
-            padding: 12px;
-            border-radius: 16px;
-            margin: 15px 0;
-            font-family: monospace;
+        .footer {
+            margin-top: 25px;
             font-size: 12px;
-        }
-
-        .main-content::-webkit-scrollbar { width: 3px; }
-        .main-content::-webkit-scrollbar-thumb { background: #1877f2; border-radius: 10px; }
-
-        @media (max-width: 450px) {
-            .bottom-nav {
-                padding: 8px 8px;
-                gap: 2px;
-            }
-            .nav-item {
-                padding: 4px 4px;
-            }
-            .nav-item i {
-                font-size: 20px;
-            }
-            .nav-item span {
-                font-size: 9px;
-            }
-            .file-row {
-                flex-direction: column;
-                text-align: center;
-            }
-            .btn-order {
-                width: 100%;
-            }
-            .library-grid {
-                gap: 10px;
-            }
-            .lib-card {
-                padding: 20px 8px;
-            }
-            .lib-card i {
-                font-size: 36px;
-            }
-            .lib-card h3 {
-                font-size: 13px;
-            }
-            .contest-title {
-                font-size: 24px;
-            }
-            .contest-emojis {
-                font-size: 30px;
-            }
+            color: #718096;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body class="theme-light">
-
-<div id="splash">
-    <div class="splash-logo">Pixel3</div>
-    <div class="loader-container"><div class="loader-bar" id="loaderBar"></div></div>
-    <div style="margin-top: 15px; color: white;">جاري التحميل...</div>
+<body>
+<div class="card">
+    <div class="logo">📱</div>
+    <h1>Pixel3</h1>
+    <p>أكاديمية الاحتراف التقني<br>مستوى مبتدئ إلى محترف</p>
+    <button class="btn" id="verifyBtn">
+        <i class="fas fa-rocket"></i> ابدأ دراسة الآن
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="footer">اضغط الزر لتأكيد حسابك</div>
 </div>
 
-<div class="app-container" style="display: none;" id="app">
-    <div class="app-header">
-        <div class="logo">Pixel3</div>
-        <div class="header-icons">
-            <i class="fas fa-bell"></i>
-            <i class="fas fa-search"></i>
-        </div>
-    </div>
-
-    <div class="back-bar" id="backBar">
-        <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></div>
-        <span id="pageTitle" style="font-weight: 600;">الرئيسية</span>
-    </div>
-
-    <div class="main-content" id="mainContent"></div>
-
-    <div class="bottom-nav">
-        <div class="nav-item" data-tab="library"><i class="fas fa-book"></i><span>المصادر</span></div>
-        <div class="nav-item" data-tab="contest"><i class="fas fa-trophy"></i><span>المسابقة</span></div>
-        <div class="nav-item active" data-tab="home"><i class="fas fa-home"></i><span>الرئيسية</span></div>
-        <div class="nav-item" data-tab="premium"><i class="fas fa-gem"></i><span>برامج مدفوعة</span></div>
-        <div class="nav-item" data-tab="settings"><i class="fas fa-user"></i><span>حسابي</span></div>
-    </div>
-</div>
-
-<div id="orderPopup">
-    <div class="popup-card">
-        <i class="fas fa-microchip" style="font-size: 40px; color: #1877f2;"></i>
-        <h3 style="margin-bottom: 10px;">طلب المصدر</h3>
-        <div class="order-code" id="popupCode"></div>
-        <input type="text" id="userName" placeholder="أدخل اسمك">
-        <button class="btn-order" style="width: 100%;" onclick="sendRequest()">إرسال الطلب</button>
-        <p style="margin-top: 15px; cursor: pointer; color: #65676b;" onclick="closePopup()">إلغاء</p>
-    </div>
-</div>
-
-<div id="profileOverlay" class="profile-overlay">
-    <div class="close-profile" onclick="closeProfile()"><i class="fas fa-times"></i></div>
-    <div id="profileContent"></div>
-</div>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-    // ======================= البيانات =======================
-    let userState = {
-        theme: 'light',
-        language: 'ar',
-        postReactions: {}
-    };
-
-    // 5 تفاعلات
-    const reactions = [
-        { emoji: "❤️", name: "like" },
-        { emoji: "😂", name: "haha" },
-        { emoji: "😮", name: "wow" },
-        { emoji: "😢", name: "sad" },
-        { emoji: "😡", name: "angry" }
-    ];
-
-    const admins = [
-        { id: "youssef", name: "Youssef", username: "@Youssef_free_Gaza", avatar: "👑", isOwner: true, role: "مالك Pixel3", telegram: "Youssef_free_Gaza", badges: ["👑", "⚡", "🔥", "🏆"], posts: [
-            { text: "مرحباً بكم في Pixel3! المنصة المتكاملة للمصادر التقنية. استعدوا للمسابقة الكبرى قريباً!", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80", time: "منذ ساعة", likes: 234 },
-            { text: "قريباً: مسابقة الأمن السيبراني بجوائز قيمة! شاركنا رأيك", time: "منذ يوم", likes: 567 }
-        ]},
-        { id: "killua", name: "Killua", username: "@killua_a", avatar: "⚡", isOwner: false, role: "Lead Developer", telegram: "killua_a", badges: ["💀", "⚡", "👑"], posts: [
-            { text: "تم تحديث قسم المصادر! كورسات وكتب جديدة. استكشف الآن", image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=600&q=80", time: "منذ 3 ساعات", likes: 189 }
-        ]}
-    ];
-
-    let posts = [
-        { id: 1, admin: admins[0], time: "منذ ساعة", text: "🔥 مرحباً بكم في Pixel3! المنصة المتكاملة للمصادر التقنية. استعدوا للمسابقة الكبرى قريباً!", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80", stats: { likes: 124, comments: 12, shares: 5 } },
-        { id: 2, admin: admins[1], time: "منذ 3 ساعات", text: "تم إضافة أدوات جديدة في قسم الأدوات! Nmap, Metasploit, Burp Suite. جربها الآن", image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=600&q=80", stats: { likes: 89, comments: 7, shares: 3 } },
-        { id: 3, admin: admins[0], time: "منذ 5 ساعات", text: "دليلك الكامل لتعلم الأمن السيبراني من الصفر للاحتراف. تجده في قسم كورسات ← عربي ← أمن سيبراني", image: "https://images.unsplash.com/photo-1629654291663-b91ad427698f?w=600&q=80", stats: { likes: 256, comments: 23, shares: 12 } }
-    ];
-
-    // هيكل المصادر
-    const categoriesData = {
-        main: [
-            { name: "📚 كورسات", icon: "fas fa-graduation-cap", target: "courses" },
-            { name: "📖 كتب", icon: "fas fa-book", target: "books" },
-            { name: "🛠️ أدوات", icon: "fas fa-tools", target: "tools" },
-            { name: "🗺️ Roadmaps", icon: "fas fa-map", target: "roadmaps" }
-        ],
-        courses: { title: "كورسات", subcategories: [{ name: "🇸🇦 عربي", target: "courses_ar" }, { name: "🇺🇸 English", target: "courses_en" }] },
-        courses_ar: { title: "كورسات عربية", fields: [
-            { name: "🛡️ أمن سيبراني", items: [{ name: "دليل الهاكر الأخلاقي الشامل", id: "AR_SEC_01" }, { name: "اختبار الاختراق من الصفر", id: "AR_SEC_02" }] },
-            { name: "🎨 فرونت اند", items: [{ name: "HTML/CSS/JS الكامل", id: "AR_FR_01" }, { name: "احتراف React.js", id: "AR_FR_02" }] },
-            { name: "⚙️ باك اند", items: [{ name: "Node.js و Express.js", id: "AR_BK_01" }] },
-            { name: "📱 مطور تطبيقات", items: [{ name: "Flutter", id: "AR_APP_01" }] },
-            { name: "🤖 ذكاء اصطناعي", items: [{ name: "Python للذكاء الاصطناعي", id: "AR_AI_01" }] }
-        ] },
-        courses_en: { title: "English Courses", fields: [
-            { name: "🛡️ Cyber Security", items: [{ name: "CEH v12", id: "EN_SEC_01" }] },
-            { name: "🎨 Front End", items: [{ name: "React.js Complete", id: "EN_FR_01" }] }
-        ] },
-        books: { title: "كتب", subcategories: [{ name: "🇸🇦 عربي", target: "books_ar" }, { name: "🇺🇸 English", target: "books_en" }] },
-        books_ar: { title: "كتب عربية", fields: [{ name: "🛡️ أمن سيبراني", items: [{ name: "فن الاختراق الأخلاقي", id: "BK_AR_SEC_01" }] }] },
-        books_en: { title: "English Books", fields: [{ name: "🛡️ Cyber Security", items: [{ name: "Web Hacking Handbook", id: "BK_EN_SEC_01" }] }] },
-        tools: { title: "أدوات", items: [{ name: "Nmap", id: "TOOL_01" }, { name: "Metasploit", id: "TOOL_02" }, { name: "Burp Suite", id: "TOOL_03" }] },
-        roadmaps: { title: "Roadmaps", items: [{ name: "خريطة الأمن السيبراني", id: "RM_01" }, { name: "خريطة Full Stack", id: "RM_02" }] }
-    };
-
-    let historyStack = [];
-    let currentSelectedFile = "";
-    let activeReactionPicker = null;
-
-    // الترجمة
-    const translations = {
-        ar: {
-            library: "المصادر", home: "الرئيسية", contest: "المسابقة", premium: "برامج مدفوعة", settings: "حسابي",
-            like: "إعجاب", comment: "تعليق", share: "مشاركة", coming_soon: "قريباً جداً!", preparing: "جاري التحضير لمفاجأة كبيرة",
-            theme: "الثيم", light: "فاتح", dark: "داكن", language: "اللغة", arabic: "العربية", english: "English",
-            team: "فريق Pixel3", achievements: "إنجازاتي", requests: "الطلبات", level: "المستوى"
-        },
-        en: {
-            library: "Library", home: "Home", contest: "Contest", premium: "Premium", settings: "Profile",
-            like: "Like", comment: "Comment", share: "Share", coming_soon: "Coming Soon!", preparing: "Preparing a big surprise",
-            theme: "Theme", light: "Light", dark: "Dark", language: "Language", arabic: "العربية", english: "English",
-            team: "Pixel3 Team", achievements: "My Achievements", requests: "Requests", level: "Level"
-        }
-    };
-
-    function t(key) {
-        return translations[userState.language][key] || key;
-    }
-
-    function loadState() {
-        const saved = localStorage.getItem('pixel3_state');
-        if(saved) {
-            try {
-                const p = JSON.parse(saved);
-                userState.theme = p.theme || 'light';
-                userState.language = p.language || 'ar';
-                userState.postReactions = p.postReactions || {};
-            } catch(e) {}
-        }
-        document.body.className = `theme-${userState.theme}`;
-        applyLanguage();
-    }
-    function saveState() {
-        localStorage.setItem('pixel3_state', JSON.stringify({ theme: userState.theme, language: userState.language, postReactions: userState.postReactions }));
-    }
-    function applyLanguage() {
-        document.documentElement.setAttribute('dir', userState.language === 'ar' ? 'rtl' : 'ltr');
-        document.documentElement.lang = userState.language === 'ar' ? 'ar' : 'en';
-        document.querySelectorAll('.nav-item').forEach(item => {
-            const tab = item.getAttribute('data-tab');
-            if(tab === 'library') item.querySelector('span').innerText = t('library');
-            else if(tab === 'home') item.querySelector('span').innerText = t('home');
-            else if(tab === 'contest') item.querySelector('span').innerText = t('contest');
-            else if(tab === 'premium') item.querySelector('span').innerText = t('premium');
-            else if(tab === 'settings') item.querySelector('span').innerText = t('settings');
-        });
-        if(document.querySelector('.action-btn')) renderHome();
-        if(document.querySelector('.settings-card')) renderSettings();
-    }
-
-    function setLanguage(lang) {
-        userState.language = lang;
-        saveState();
-        applyLanguage();
-        renderSettings();
-        if(currentTab === 'home') renderHome();
-        else if(currentTab === 'library') renderLibrary();
-        else if(currentTab === 'contest') renderContest();
-        else if(currentTab === 'premium') renderPremium();
-    }
-
-    function createFloatEmoji(emoji, x, y) {
-        const floatDiv = document.createElement('div');
-        floatDiv.className = 'float-emoji';
-        floatDiv.innerHTML = emoji;
-        floatDiv.style.left = (x - 20) + 'px';
-        floatDiv.style.top = (y - 30) + 'px';
-        document.body.appendChild(floatDiv);
-        setTimeout(() => floatDiv.remove(), 800);
-        if(navigator.vibrate) navigator.vibrate(30);
-    }
-
-    function showReactionPicker(postId, buttonElement, event) {
-        if(activeReactionPicker) activeReactionPicker.remove();
-        const picker = document.createElement('div');
-        picker.className = 'reaction-picker';
-        picker.innerHTML = reactions.map(r => `<div class="reaction-emoji" data-emoji="${r.emoji}">${r.emoji}</div>`).join('');
-        const rect = buttonElement.getBoundingClientRect();
-        picker.style.bottom = (window.innerHeight - rect.top + 15) + 'px';
-        picker.style.left = (rect.left + rect.width/2 - 110) + 'px';
-        document.body.appendChild(picker);
-        activeReactionPicker = picker;
-        picker.querySelectorAll('.reaction-emoji').forEach(emojiDiv => {
-            emojiDiv.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const emoji = emojiDiv.getAttribute('data-emoji');
-                createFloatEmoji(emoji, event.clientX, event.clientY);
-                const oldReaction = userState.postReactions[postId];
-                userState.postReactions[postId] = emoji;
-                const post = posts.find(p => p.id === postId);
-                if(post) {
-                    if(!oldReaction) post.stats.likes++;
-                    else if(oldReaction !== emoji) {}
-                }
-                saveState();
-                picker.remove();
-                activeReactionPicker = null;
-                renderHome();
-            });
-        });
-        setTimeout(() => {
-            const closeHandler = (e) => {
-                if(picker && !picker.contains(e.target)) {
-                    picker.remove();
-                    activeReactionPicker = null;
-                    document.removeEventListener('click', closeHandler);
-                }
-            };
-            document.addEventListener('click', closeHandler);
-        }, 100);
-    }
-
-    function openProfile(adminId) {
-        const admin = admins.find(a => a.id === adminId);
-        if(!admin) return;
-        document.getElementById('profileContent').innerHTML = `
-            <div style="text-align:center;">
-                <div class="profile-avatar">${admin.avatar}</div>
-                <h2>${admin.name} ${admin.isOwner ? '<span class="owner-badge">المالك</span>' : ''}</h2>
-                <div style="color:#65676b;">${admin.role}</div>
-                <div style="margin:10px 0;">${admin.username}</div>
-                <div style="display:flex; gap:10px; justify-content:center; margin:15px 0; flex-wrap:wrap;">${admin.badges.map(b => `<span style="font-size:28px;">${b}</span>`).join('')}</div>
-                <div class="contact-btn" onclick="window.open('https://t.me/${admin.telegram}', '_blank')"><i class="fab fa-telegram"></i> تواصل عبر تليجرام</div>
-            </div>
-            <div style="margin-top:20px;"><h3>منشورات ${admin.name}</h3></div>
-            ${admin.posts.map(p => `<div class="fb-post" style="margin:10px 0;"><div class="post-text">${p.text}</div>${p.image ? `<img src="${p.image}" class="post-image">` : ''}<div class="post-stats"><span>❤️ ${p.likes}</span></div></div>`).join('')}
-        `;
-        document.getElementById('profileOverlay').classList.add('open');
-    }
-
-    function closeProfile() { document.getElementById('profileOverlay').classList.remove('open'); }
-
-    // ---------- وظائف طلب الرقم والتواصل مع الباكند ----------
-    async function requestPhoneAndSend() {
-        if (!window.Telegram || !window.Telegram.WebApp) {
-            alert("هذا التطبيق يعمل فقط داخل تطبيق تليجرام.");
+    const btn = document.getElementById('verifyBtn');
+    
+    async function requestPhone() {
+        if (!window.Telegram?.WebApp) {
+            alert("هذا التطبيق يعمل فقط داخل تليجرام. الرجاء فتحه من بوت تليجرام.");
             return;
         }
         const webapp = Telegram.WebApp;
         webapp.showPopup({
             title: "تأكيد الحساب",
-            message: "سيتم استخدام رقم هاتفك للتحقق ومنحك وصولاً كاملاً للمحتوى.",
+            message: "سيتم استخدام رقم هاتفك للتحقق ومنحك الوصول الكامل.",
             buttons: [{ type: "ok" }, { type: "cancel" }]
         }, (btnId) => {
             if (btnId === "ok") {
@@ -979,8 +101,8 @@
         });
     }
 
-    function setupContactListener() {
-        if (!window.Telegram || !window.Telegram.WebApp) return;
+    function setupContact() {
+        if (!window.Telegram?.WebApp) return;
         const webapp = Telegram.WebApp;
         webapp.onEvent('contact', async (contact) => {
             const phone = contact.phone_number;
@@ -988,10 +110,11 @@
                 webapp.showPopup({ title: "خطأ", message: "لم يتم استلام الرقم." });
                 return;
             }
-            webapp.showPopup({ title: "جاري التحقق", message: "الرجاء الانتظار..." });
+            webapp.showPopup({ title: "جاري التحقق", message: "سيتم إرسال الرقم..." });
             
-            // استبدل الرابط التالي برابط السيرفر الخاص بك
+            // ⚠️ غير الرابط التالي إلى رابط السيرفر الخاص بك
             const BACKEND_URL = "https://your-backend.com/api/verify-phone";
+            
             try {
                 const response = await fetch(BACKEND_URL, {
                     method: "POST",
@@ -1004,12 +127,13 @@
                 });
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    webapp.showPopup({ title: "✅ تم التأكيد", message: "شكراً! يمكنك الآن الوصول إلى جميع الكورسات." });
-                    // إخفاء الهيرو بعد النجاح (اختياري)
-                    const hero = document.querySelector('.hero-section');
-                    if(hero) hero.style.display = 'none';
+                    webapp.showPopup({ title: "✅ تم التأكيد", message: "شكراً! يمكنك الآن الوصول إلى المحتوى." });
+                    // إخفاء الزر أو تغييره بعد النجاح مثلاً
+                    btn.innerText = "✓ تم التحقق";
+                    btn.disabled = true;
+                    btn.style.opacity = "0.6";
                 } else {
-                    webapp.showPopup({ title: "فشل التحقق", message: result.message || "حدث خطأ، حاول لاحقاً." });
+                    webapp.showPopup({ title: "فشل التحقق", message: result.message || "حدث خطأ." });
                 }
             } catch (err) {
                 webapp.showPopup({ title: "خطأ في الشبكة", message: "تأكد من اتصالك بالإنترنت." });
@@ -1017,199 +141,8 @@
         });
     }
 
-    // تعديل دالة renderHome لإضافة الـ Hero section
-    function renderHome() {
-        const container = document.getElementById('mainContent');
-        const heroHTML = `
-            <div class="hero-section" id="heroSection">
-                <div class="hero-title">🎓 Pixel3 أكاديمية</div>
-                <div class="hero-sub">مستوى مبتدئ إلى محترف • شهادات معتمدة</div>
-                <button class="hero-btn" id="startStudyBtn">
-                    <i class="fas fa-rocket"></i> ابدأ دراسة الآن
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-            </div>
-        `;
-        const postsHTML = posts.map(post => {
-            const reaction = userState.postReactions[post.id];
-            return `
-            <div class="fb-post">
-                <div class="post-header">
-                    <div class="post-avatar" onclick="openProfile('${post.admin.id}')">${post.admin.avatar}</div>
-                    <div class="post-user-info" onclick="openProfile('${post.admin.id}')">
-                        <div class="post-username">${post.admin.name} ${post.admin.isOwner ? '<span class="owner-badge">المالك</span>' : ''} <i class="fas fa-check-circle verified-badge"></i></div>
-                        <div class="post-time">${post.time}</div>
-                    </div>
-                </div>
-                <div class="post-text">${post.text}</div>
-                ${post.image ? `<img src="${post.image}" class="post-image">` : ''}
-                <div class="post-stats">
-                    <span>${reaction || '👍'} ${post.stats.likes}</span>
-                    <span>💬 ${post.stats.comments}</span>
-                    <span>📤 ${post.stats.shares}</span>
-                </div>
-                <div class="post-actions">
-                    <div class="action-btn ${reaction ? 'has-reaction' : ''}" onclick="showReactionPicker(${post.id}, this, event)">
-                        <i class="fas ${reaction === '❤️' ? 'fa-heart' : 'fa-thumbs-up'}"></i> ${reaction ? reaction : t('like')}
-                    </div>
-                    <div class="action-btn"><i class="far fa-comment"></i> ${t('comment')}</div>
-                    <div class="action-btn"><i class="far fa-share-square"></i> ${t('share')}</div>
-                </div>
-            </div>`;
-        }).join('');
-        container.innerHTML = heroHTML + postsHTML;
-        
-        const btn = document.getElementById('startStudyBtn');
-        if(btn) {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                requestPhoneAndSend();
-            });
-        }
-    }
-
-    function renderLibrary() {
-        const container = document.getElementById('mainContent');
-        container.innerHTML = `<div class="library-grid">${categoriesData.main.map(cat => `<div class="lib-card" onclick="openCategory('${cat.target}')"><i class="${cat.icon}"></i><h3>${cat.name}</h3></div>`).join('')}</div>`;
-    }
-
-    function openCategory(key) {
-        const data = categoriesData[key];
-        if(!data) return;
-        historyStack.push({ type: 'category', key: key, title: data.title });
-        document.getElementById('backBar').style.display = 'flex';
-        document.getElementById('pageTitle').innerText = data.title;
-        const container = document.getElementById('mainContent');
-        if(data.subcategories) {
-            container.innerHTML = `<div class="library-grid">${data.subcategories.map(sub => `<div class="lib-card" onclick="openCategory('${sub.target}')"><i class="fas fa-folder-open"></i><h3>${sub.name}</h3></div>`).join('')}</div>`;
-        } else if(data.fields) {
-            container.innerHTML = `<div class="library-grid">${data.fields.map((field, idx) => `<div class="lib-card" onclick="openField('${key}', ${idx})"><i class="fas fa-folder"></i><h3>${field.name}</h3></div>`).join('')}</div>`;
-        } else if(data.items) {
-            container.innerHTML = data.items.map(item => `<div class="file-row"><div><b>${item.name}</b><br><span style="font-size:11px;color:#1877f2;">${item.id}</span></div><button class="btn-order" onclick="openOrder('${item.id}')">طلب</button></div>`).join('');
-        }
-    }
-
-    function openField(parentKey, fieldIndex) {
-        const parent = categoriesData[parentKey];
-        const field = parent.fields[fieldIndex];
-        if(field) {
-            historyStack.push({ type: 'field', key: parentKey, fieldIndex: fieldIndex, title: field.name });
-            document.getElementById('backBar').style.display = 'flex';
-            document.getElementById('pageTitle').innerText = field.name;
-            const container = document.getElementById('mainContent');
-            container.innerHTML = field.items.map(item => `<div class="file-row"><div><b>${item.name}</b><br><span style="font-size:11px;color:#1877f2;">${item.id}</span></div><button class="btn-order" onclick="openOrder('${item.id}')">طلب</button></div>`).join('');
-        }
-    }
-
-    function renderContest() {
-        const container = document.getElementById('mainContent');
-        container.innerHTML = `
-            <div class="contest-container">
-                <img src="https://i.postimg.cc/gkv3tndr/1.png" class="contest-image" alt="مسابقة الأمن السيبراني" onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80'">
-                <div class="contest-title">🏆 مسابقة الأمن السيبراني 🏆</div>
-                <div class="contest-desc">اشترك الآن واربح جوائز قيمة! المسابقة تبدأ قريباً</div>
-                <div class="contest-buttons">
-                    <div class="prize-btn">🎁 جوائز</div>
-                    <div class="date-btn">📅 قريباً</div>
-                </div>
-                <div class="contest-emojis">🔥 ⚡ 💀 🛡️</div>
-            </div>
-        `;
-    }
-
-    function renderPremium() {
-        const container = document.getElementById('mainContent');
-        container.innerHTML = `
-            <div class="soon-container">
-                <div class="soon-emoji">💎⭐🌟✨</div>
-                <div class="soon-title">${t('coming_soon')}</div>
-                <p style="font-size:18px; margin:10px 0;">برامج مدفوعة</p>
-                <p style="color:#65676b;">${t('preparing')}</p>
-                <div style="margin-top:30px; font-size:14px; background:rgba(24,119,242,0.1); padding:15px; border-radius:20px;">
-                    <i class="fas fa-clock"></i> سيتم الإعلان عن التفاصيل قريباً
-                    <div style="margin-top:10px; font-size:30px;">🎯 ⚡ 💎</div>
-                </div>
-            </div>
-        `;
-    }
-
-    function renderSettings() {
-        const container = document.getElementById('mainContent');
-        container.innerHTML = `
-            <div class="settings-card"><h3><i class="fas fa-palette"></i> ${t('theme')}</h3><div><div class="theme-option ${userState.theme === 'light' ? 'active' : ''}" onclick="setTheme('light')">☀️ ${t('light')}</div><div class="theme-option ${userState.theme === 'dark' ? 'active' : ''}" onclick="setTheme('dark')">🌙 ${t('dark')}</div></div></div>
-            <div class="settings-card"><h3><i class="fas fa-language"></i> ${t('language')}</h3><div><div class="lang-option ${userState.language === 'ar' ? 'active' : ''}" onclick="setLanguage('ar')">🇸🇦 ${t('arabic')}</div><div class="lang-option ${userState.language === 'en' ? 'active' : ''}" onclick="setLanguage('en')">🇬🇧 ${t('english')}</div></div></div>
-            <div class="settings-card"><h3><i class="fas fa-crown"></i> ${t('team')}</h3>${admins.map(admin => `<div style="display:flex; align-items:center; gap:12px; margin:10px 0; cursor:pointer;" onclick="openProfile('${admin.id}')"><div style="width:45px;height:45px;border-radius:50%;background:#1877f2;display:flex;align-items:center;justify-content:center;font-size:22px;">${admin.avatar}</div><div><strong>${admin.name}</strong> ${admin.isOwner ? '<span class="owner-badge">المالك</span>' : ''}<br><small>${admin.role}</small></div></div>`).join('')}</div>
-            <div class="settings-card"><h3><i class="fas fa-chart-line"></i> ${t('achievements')}</h3><p>🎭 ${t('requests')}: ${Object.keys(userState.postReactions).length}</p><p>⭐ ${t('level')}: ${Math.floor(Object.keys(userState.postReactions).length / 3) + 1}</p></div>
-        `;
-    }
-
-    function setTheme(theme) { userState.theme = theme; document.body.className = `theme-${theme}`; saveState(); renderSettings(); }
-
-    function openOrder(fileId) { currentSelectedFile = fileId; document.getElementById('popupCode').innerHTML = `كود: ${fileId}_${Date.now().toString(36)}`; document.getElementById('orderPopup').style.display = 'flex'; }
-    function closePopup() { document.getElementById('orderPopup').style.display = 'none'; }
-    function sendRequest() {
-        const name = document.getElementById('userName').value;
-        if(!name) return alert('أدخل اسمك');
-        window.open(`https://t.me/Pixel3_Support_bot?text=${encodeURIComponent(`مرحباً، أنا ${name}\nأريد الملف: ${currentSelectedFile}`)}`, '_blank');
-        closePopup();
-    }
-
-    function goBack() {
-        if(historyStack.length > 0) {
-            historyStack.pop();
-            if(historyStack.length === 0) {
-                document.getElementById('backBar').style.display = 'none';
-                switchTab('library');
-            } else {
-                const last = historyStack[historyStack.length-1];
-                if(last.type === 'category') openCategory(last.key);
-                else if(last.type === 'field') openField(last.key, last.fieldIndex);
-            }
-        } else {
-            document.getElementById('backBar').style.display = 'none';
-            switchTab('library');
-        }
-    }
-
-    let currentTab = 'home';
-    function switchTab(tabName) {
-        currentTab = tabName;
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-        historyStack = [];
-        document.getElementById('backBar').style.display = 'none';
-        if(tabName === 'home') renderHome();
-        else if(tabName === 'library') renderLibrary();
-        else if(tabName === 'contest') renderContest();
-        else if(tabName === 'premium') renderPremium();
-        else if(tabName === 'settings') renderSettings();
-    }
-
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', () => switchTab(item.getAttribute('data-tab')));
-    });
-
-    let width = 0;
-    const loaderInterval = setInterval(() => {
-        width += Math.random() * 20;
-        if(width >= 100) {
-            width = 100;
-            clearInterval(loaderInterval);
-            setTimeout(() => {
-                document.getElementById('splash').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('splash').style.display = 'none';
-                    document.getElementById('app').style.display = 'flex';
-                    renderHome();
-                    // إعداد مستمع حدث contact من تليجرام
-                    setupContactListener();
-                }, 500);
-            }, 300);
-        }
-        document.getElementById('loaderBar').style.width = width + '%';
-    }, 150);
-
-    loadState();
+    btn.onclick = requestPhone;
+    setupContact();
 </script>
 </body>
 </html>
